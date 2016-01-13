@@ -13,7 +13,7 @@ Each 512 bit block is separated to eight 64 bit words (unsigned long).
 For each block is subsequently performed the words expansion so that the number of words in each block will be 64.
 For each word in each block is performed the calculation in the picture.
 
-![alt tag](https://raw.github.com/username/projectname/branch/path/to/img.png)
+![alt tag](https://raw.githubusercontent.com/jaromir92/Hash/master/img/schema.png)
 
 A, B, C, D, E, F, K … 64bit word (unsigned long)
 UO … unary operation
