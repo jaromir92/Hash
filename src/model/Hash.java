@@ -4,46 +4,18 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Třída <strong>Hash</strong> vytvoří pro zadaný vstup otisk o délce 384 bitů (64 znaků).
- *
- * @author Jara
- */
 public class Hash {
-    
-    /**
-     * Konstanta - Velikost jednoho bloku vstupních slov.
-     */
+
     private static final int BUCKET_SIZE = 512;
-    
-    /**
-     * Konstanta - Počet slov, které jsou v jednotlivých blocích před expanzí.
-     */
     private static final int WORD_PER_BUCKET_BEFORE_EXPAND = BUCKET_SIZE / Word.getWordSize();
-    
-    /**
-     * Konstanta - Počet slov, které jsou v jednotlivých blocích po expanzi.
-     */
     private static final int WORD_PER_BUCKET_AFTER_EXPAND = 64;
-    
-    /**
-     * Proměnná - zde je uložena hodnota výsledného otisku v binární podobě.
-     */
+
     private BinaryCode hash;
-    
-    /**
-     * Proměnná - Seznam seznamů vstupních slov.
-     */
+
     private final List<BucketWords> inputWords;
-    
-    /**
-     * Proměnná - instance slovníku povolených znaků.
-     */
+
     private final CharsDictionary chars;
-    
-    /**
-     * Proměnné - typu Word, které se budou v průběhu výpočtu hashe měnit.
-     */
+  
     private Word A;
     private Word B;
     private Word C;
@@ -51,15 +23,8 @@ public class Hash {
     private Word E;
     private Word F;
     
-    /**
-     * Proměnná - pomocné slovo, které je použito ve výpočtu výsledného hashe.
-     */
     private final Word K;
 
-    /**
-     * Konstruktor inicializuje výpočtová slova, slovník povolených znaků, seznam vstupních slov a poté spustí metodu, která vytvoří otisk pro vstupní řetězec.
-     * @param inputText vstupní řetězec, který je potřeba zahashovat. 
-     */
     public Hash(Input inputText) {
         this.inputWords = new ArrayList<>();
         this.chars = new CharsDictionary();
@@ -72,43 +37,23 @@ public class Hash {
         this.K = new Word(new BigInteger("1101100111111111000000000010001010100011001000010100001000011110", 2));
         hash(inputText);
     }
-    
-    /**
-     * Metoda vytvoří pro zadaný parametr otisk o délce 384 bitů.
-     * @param inputText vstupní řetězec k zahashování. 
-     */
+
     private void hash(Input inputText) {
         preprocessCalculation(inputText.getValue());
         calculateWords();
         setHash();
     }
-    
-    /**
-     * Metoda připraví vstupní slova k samotnému výpočtu hashe.
-     * 
-     * @param inputText vstupní řetězec k zahashování.
-     */
+
     private void preprocessCalculation(String inputText) {
         BinaryStream binaryStream = getBinaryStream(inputText);
         setInputWords(binaryStream);
         expandInputWords();
     }
-    
-    /**
-     * Metoda vrátí ze zadaného parametru binární stream.
-     * 
-     * @param inputText vstupní řetězec k zahashování.
-     * @return BinaryStream vstupního řetězce.
-     */
+
     private BinaryStream getBinaryStream(String inputText) {
         return new BinaryStream(new BinaryCode(inputText, true));
     }
-    
-    /**
-     * Metoda rozparsuje binární stream na slova a uloží je do jednotlivých seznamů.
-     * 
-     * @param binaryStream binární stream vstupního řetězce.
-     */
+
     private void setInputWords(BinaryStream binaryStream) {
         BucketWords bucketWords;
         int startIndex = 0;
@@ -119,10 +64,7 @@ public class Hash {
             startIndex += BUCKET_SIZE;
         }
     }
-    
-    /**
-     * Metoda pro každý seznam vypočítá expanze všech vstupních slov v daném seznamu.
-     */
+
     private void expandInputWords() {
         Word newWord;
         for(BucketWords bw : this.inputWords) {
@@ -132,10 +74,7 @@ public class Hash {
             }
         }
     }
-    
-    /**
-     * Metoda provede finální výpočet slov A až F. 
-     */
+
     private void calculateWords() {
         for(BucketWords bw : this.inputWords) {
             for(int index = 0; index < bw.getSize(); index++) {
@@ -150,21 +89,13 @@ public class Hash {
             }
         }
     }
-    
-    /**
-     * Metoda ze slov A až F sestaví výsledný hash v binární podobě.
-     */
+
     private void setHash() {
         String binary = this.A.getBinaryValue() + this.B.getBinaryValue() + this.C.getBinaryValue() + 
                         this.D.getBinaryValue() + this.E.getBinaryValue() + this.F.getBinaryValue();
         this.hash = new BinaryCode(binary, false);
     }
     
-    /**
-     * Metoda vrátí hodnotu hashe v decimální podobě.
-     * 
-     * @return String výsledný hash 
-     */
     public String toDecimal() {
         int bitLengthOfChar = CharsDictionary.getBitLengthOfChar();
         String binary = this.hash.getValue();
@@ -178,12 +109,7 @@ public class Hash {
         }
         return result;
     }
-    
-    /**
-     * Metoda vrátí velikost jednoho bloku vstupních slov.
-     * 
-     * @return int velikost 1 bloku vstupního vstupních slov.
-     */
+
     public static int getBucketSize() {
         return BUCKET_SIZE;
     }
