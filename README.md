@@ -21,7 +21,7 @@ UO … unary operation
 
 Wi … input word at index i
 
-* mod … after multiple input words is applied operation mod 2^64 
+x mod … after multiple input words is applied operation mod 2^64 
 
 XOR … bit operation XOR
 
