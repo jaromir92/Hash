@@ -16,10 +16,15 @@ For each word in each block is performed the calculation in the picture.
 ![alt tag](https://raw.githubusercontent.com/jaromir92/Hash/master/img/schema.png)
 
 A, B, C, D, E, F, K … 64bit word (unsigned long)
+
 UO … unary operation
+
 Wi … input word at index i
+
 * mod … after multiple input words is applied operation mod 2^64 
+
 XOR … bit operation XOR
+
 << 384 mod … after shiftLeft 384 is applied operation mod 2^64
 
 After calculation the words A .. F are concatenated (in binary representation) to one binary code (6x64bit = 384 bits).
