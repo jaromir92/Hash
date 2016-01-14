@@ -6,8 +6,7 @@ import java.util.List;
 
 public class Hash {
 
-    private static final int BUCKET_SIZE = 512;
-    private static final int WORD_PER_BUCKET_BEFORE_EXPAND = BUCKET_SIZE / Word.getWordSize();
+    private static final int WORD_PER_BUCKET_BEFORE_EXPAND = BucketWords.getBucketSize() / Word.getWordSize();
     private static final int WORD_PER_BUCKET_AFTER_EXPAND = 64;
 
     private BinaryCode hash;
@@ -45,23 +44,26 @@ public class Hash {
     }
 
     private void preprocessCalculation(String inputText) {
-        BinaryStream binaryStream = getBinaryStream(inputText);
-        setInputWords(binaryStream);
+        BinaryCode binaryCode = getBinaryStream(inputText);
+        setInputWords(binaryCode);
         expandInputWords();
     }
 
-    private BinaryStream getBinaryStream(String inputText) {
-        return new BinaryStream(new BinaryCode(inputText, true));
+    private BinaryCode getBinaryStream(String inputText) {
+        BinaryCode bc = new BinaryCode(inputText, true);
+        bc.makeBinaryStream();
+        bc.fillWithZeroesAfter(BucketWords.getBucketSize());
+        return bc;
     }
 
-    private void setInputWords(BinaryStream binaryStream) {
+    private void setInputWords(BinaryCode binaryStream) {
         BucketWords bucketWords;
         int startIndex = 0;
         int binaryStreamLength = binaryStream.getLength();
         while(startIndex < binaryStreamLength) {
-            bucketWords = new BucketWords(binaryStream.getSubBinaryStream(startIndex, BUCKET_SIZE));
+            bucketWords = new BucketWords(binaryStream.getSubBinaryCode(startIndex, BucketWords.getBucketSize()));
             this.inputWords.add(bucketWords);
-            startIndex += BUCKET_SIZE;
+            startIndex += BucketWords.getBucketSize();
         }
     }
 
@@ -91,8 +93,8 @@ public class Hash {
     }
 
     private void setHash() {
-        String binary = this.A.getBinaryValue() + this.B.getBinaryValue() + this.C.getBinaryValue() + 
-                        this.D.getBinaryValue() + this.E.getBinaryValue() + this.F.getBinaryValue();
+        String binary = this.A.getBinary().getValue() + this.B.getBinary().getValue() + this.C.getBinary().getValue() + 
+                        this.D.getBinary().getValue() + this.E.getBinary().getValue() + this.F.getBinary().getValue();
         this.hash = new BinaryCode(binary, false);
     }
     
@@ -108,9 +110,5 @@ public class Hash {
             startIndex += bitLengthOfChar;
         }
         return result;
-    }
-
-    public static int getBucketSize() {
-        return BUCKET_SIZE;
     }
 }

@@ -5,16 +5,18 @@ import java.util.List;
 
 public class BucketWords {
 
+    private static final int BUCKET_SIZE = 512;
+    
     private final List<Word> wordList;
 
-    public BucketWords(BinaryStream binaryBlock) {
+    public BucketWords(BinaryCode binaryBlock) {
         this.wordList = new ArrayList<>();
         Word word;
-        BinaryStream binaryWord;
+        BinaryCode binaryWord;
         int startIndex = 0;
         int binaryStreamLength = binaryBlock.getLength();
         while(startIndex < binaryStreamLength) {
-            binaryWord = binaryBlock.getSubBinaryStream(startIndex, Word.getWordSize());
+            binaryWord = binaryBlock.getSubBinaryCode(startIndex, Word.getWordSize());
             word = new Word(binaryWord);
             this.wordList.add(word);
             startIndex += Word.getWordSize();
@@ -35,5 +37,9 @@ public class BucketWords {
 
     public List<Word> getWordList() {
         return this.wordList;
+    }
+    
+    public static int getBucketSize() {
+        return BUCKET_SIZE;
     }
 }

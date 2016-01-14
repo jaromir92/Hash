@@ -29,3 +29,6 @@ XOR … bit operation XOR
 
 After calculation the words A .. F are concatenated (in binary representation) to one binary code (6x64bit = 384 bits).
 The finally binary code is transformed by dictionary of chars to decimal string (64 characters).
+
+## You can try!
+If you download and unzip this [zip file](https://github.com/jaromir92/Hash/blob/master/application.zip), you can use this hash function by yourself.

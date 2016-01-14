@@ -1,7 +1,6 @@
 package model;
 
 import java.math.BigInteger;
-import org.apache.commons.lang3.StringUtils;
 
 public class Word {
 
@@ -19,34 +18,26 @@ public class Word {
         } 
     }
 
-    public Word(BinaryStream binaryStream) {
+    public Word(BinaryCode binaryCode) {
         String binaryWord;
-        if(binaryStream.getLength() <= WORD_SIZE) {
-            binaryWord = binaryStream.getValue();
+        if(binaryCode.getLength() <= WORD_SIZE) {
+            binaryWord = binaryCode.getValue();
         }
         else {
-            binaryWord = binaryStream.getValue().substring(binaryStream.getLength() - WORD_SIZE);
+            binaryWord = binaryCode.getSubBinaryCode(binaryCode.getLength() - WORD_SIZE, WORD_SIZE).getValue();
         }
         this.value = new BigInteger(binaryWord, 2);
     }
 
-    public BigInteger getDecimalValue() {
+    public BigInteger getDecimal() {
         return this.value;
     }
 
-    public String getBinaryValue() {
+    public BinaryCode getBinary() {
         String binaryValue = this.value.toString(2);
-        int numberOfMissingZeroes = getNumberOfMissingZeroes(binaryValue);
-        String zeroesStream = getZeroesStream(numberOfMissingZeroes);
-        return zeroesStream += binaryValue;
-    }
-
-    private int getNumberOfMissingZeroes(String binaryValue) {
-        return WORD_SIZE - binaryValue.length();
-    }
-
-    private String getZeroesStream(int quantity) {
-        return StringUtils.repeat("0", quantity);
+        BinaryCode binaryCode = new BinaryCode(binaryValue, false);
+        binaryCode.fillWithZeroesBefore(WORD_SIZE);
+        return binaryCode;
     }
 
     public int getBitCount() {
