@@ -24,7 +24,7 @@ public class Hash {
     
     private final Word K;
 
-    public Hash(Input inputText) {
+    public Hash() {
         this.inputWords = new ArrayList<>();
         this.chars = new CharsDictionary();
         this.A = new Word(new BigInteger("0011111111111110000000000111111000000000000000111111111000000001", 2));  
@@ -34,11 +34,10 @@ public class Hash {
         this.E = new Word(new BigInteger("1001001111000000000000000010000011111111110001000001000111101111", 2));
         this.F = new Word(new BigInteger("0001001111110100010111110011000011100000001111011101011110011111", 2));
         this.K = new Word(new BigInteger("1101100111111111000000000010001010100011001000010100001000011110", 2));
-        hash(inputText);
     }
 
-    private void hash(Input inputText) {
-        preprocessCalculation(inputText.getValue());
+    public void makeHash(String inputText) {
+        preprocessCalculation(inputText);
         calculateWords();
         setHash();
     }
